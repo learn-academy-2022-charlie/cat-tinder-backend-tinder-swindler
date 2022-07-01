@@ -42,10 +42,14 @@ RSpec.describe "Animes", type: :request do
       end
     end
 
-    describe "PUT /update" do
+    describe "PATCH /update" do
       it 'updates an anime personal' do
+
+        Anime.create name: 'Naruto', age: 19, enjoys: 'Fighting Sasuke', image:'https://cdn.vox-cdn.com/thumbor/UYGyZq6-eRl1gI_sZtFUDhVvois=/0x0:1280x721/1820x1213/filters:focal(544x281:748x485):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/70124512/naruto.0.jpg'
         
-        anime_params = {
+        anime= Anime.first
+
+        updated_anime_params = {
         anime: {
           name:'Naruto',
            age: 20, 
@@ -55,17 +59,13 @@ RSpec.describe "Animes", type: :request do
       }
 
 
-        patch '/animes', params: anime_params
-        # this is the response 
-  anime = JSON.parse(response.body)
-        # need to make sure the status code is correct 
-  expect(response).to have_http_status(200)
-  #       anime = Anime.update(params[:id])
-  # expect(anime.name).to eq 'Naruto'
-  # expect(anime.age).to eq 20
-  # expect(anime.enjoys).to eq 'Fighting Sasuke'
-  # expect(anime.image).to eq 'https://cdn.vox-cdn.com/thumbor/UYGyZq6-eRl1gI_sZtFUDhVvois=/0x0:1280x721/1820x1213/filters:focal(544x281:748x485):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/70124512/naruto.0.jpg'
-      
+        patch "/animes/#{anime.id}", params: updated_anime_params
+        
+        expect(response).to have_http_status(200)
+        
+        updated_anime = Anime.find(anime.id)
+        expect(anime.age).to eq 19
+        expect(updated_anime.age).to eq 20
       end
     end
 
