@@ -6,13 +6,20 @@ class AnimesController < ApplicationController
 
     def create 
         anime = Anime.create(anime_params)
-        render json: anime
+        if anime.valid?
+            render json: anime
+        else
+            render json: anime.error, status:422
+        end
     end
-
-    def update
+    def update 
         anime = Anime.find(params[:id])
         anime.update(anime_params)
-        render json: anime 
+        if anime.valid?
+        render json: anime
+        else
+            render json: anime.error, status:422
+        end
     end
 
     def destroy 
